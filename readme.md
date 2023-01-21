@@ -33,7 +33,7 @@ pip install -r requirements.txt
 uvicorn app.main:app --reload
 ```
 ### Run Postman API tests
-- import file ```RESTful_FastAPI_Posman_Collection.postman_collection.json``` into Postman
+- import file ```Posman_Collection.postman_collection.json``` into Postman
 - run collection
 
 ### Documentation
