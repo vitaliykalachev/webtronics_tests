@@ -1,0 +1,38 @@
+
+from enum import unique
+from xmlrpc.client import Boolean
+from .database import Base
+from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, func
+from sqlalchemy.sql.sqltypes import TIMESTAMP
+from sqlalchemy.orm import relationship
+
+
+class Post(Base):
+    __tablename__ = 'posts'
+    id = Column(Integer, primary_key=True, nullable=False)
+    title = Column(String, nullable=False)
+    content = Column(String, nullable=False)
+    published = Column(Boolean, server_default='TRUE', default=True)
+    create_at = Column(TIMESTAMP(timezone=True),
+                       nullable=False, server_default=func.now())
+    user_id = Column(Integer,
+                     ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    user = relationship("User")
+
+
+class User(Base):
+    __tablename__ = "users"
+    id = Column(Integer, primary_key=True, nullable=False)
+    email = Column(String, nullable=False, unique=True)
+    password = Column(String, nullable=False)
+    create_at = Column(TIMESTAMP(timezone=True),
+                       nullable=False, server_default=func.now())
+    phone_number = Column(String)
+
+
+class Vote(Base):
+    __tablename__ = "votes"
+    user_id = Column(Integer, ForeignKey(
+        "users.id", ondelete="CASCADE"), primary_key=True)
+    post_id = Column(Integer, ForeignKey(
+        "posts.id", ondelete="CASCADE"), primary_key=True)
