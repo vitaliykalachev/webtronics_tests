@@ -10,9 +10,10 @@
 
 ## Functionality:
 
-- User registration/authorization. During authorization, the user on the client receives a JWT from which you can get the user id.
-- An authorized user has access to CRUD endpoints 
-- CRUD Documetation (Swagger)
+- User registration/authorization. 
+- An authorized user has access to CRUD endpoints
+- An authorized user can like or dislike other users posts but not his own
+- CRUD API Documetation (Swagger)
 - Postman collection with autotests
 
 
