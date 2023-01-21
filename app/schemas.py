@@ -27,8 +27,6 @@ class Post(PostBase):
     id: int
     create_at: datetime
     user_id: int
-    user: UserOut
-
     class Config:
         orm_mode = True
 

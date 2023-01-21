@@ -1,0 +1,647 @@
+{
+	"info": {
+		"_postman_id": "b906a601-b721-4d9d-912c-8dcc7b495a0f",
+		"name": "RESTful FastAPI Posman Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21164784"
+	},
+	"item": [
+		{
+			"name": "user create",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Body matches string\", function () {",
+							"    const responseJson = pm.response.json();",
+							"    tests[\"[INFO] Response: \" + responseBody] = true;",
+							"    pm.expect(responseJson).to.haveOwnProperty(\"email\");",
+							"    ",
+							"    pm.expect(responseJson).to.haveOwnProperty(\"id\");",
+							"    pm.collectionVariables.set(\"Username\", responseJson.email);",
+							"    pm.collectionVariables.set(\"User_id\", responseJson.id);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"{{$randomEmail}}\",\n    \"password\": \"12345\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/users",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "users",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Body matches string\", function () {",
+							"    const responseJson = pm.response.json();",
+							"    tests[\"[INFO] Response: \" + responseBody] = true;",
+							"    pm.expect(responseJson).to.haveOwnProperty(\"id\");",
+							"    pm.expect(responseJson).to.haveOwnProperty(\"email\");",
+							"    pm.expect(responseJson).to.haveOwnProperty(\"create_at\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Token}}",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "{{URL}}/users/{{User_id}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"users",
+						"{{User_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", () => {",
+							"  pm.expect(pm.response.code).to.eql(200);",
+							"});",
+							"",
+							"pm.test(\"The response has all properties\", () => {",
+							"",
+							"    const responseJson = pm.response.json();",
+							"    tests[\"[INFO] Response: \" + responseBody] = true;",
+							"  ",
+							"    pm.expect(responseJson).to.haveOwnProperty(\"access_token\");",
+							"    pm.expect(responseJson).to.haveOwnProperty(\"token_type\");",
+							"    pm.collectionVariables.set(\"Token\", responseJson.access_token);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "{{Username}}",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "12345",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{URL}}/login/",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"login",
+						""
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "{{Username}}",
+							"disabled": true
+						},
+						{
+							"key": "password",
+							"value": "12345",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "posts",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Body matches string\", function () {",
+							"    const responseJson = pm.response.json();",
+							"    tests[\"[INFO] Response: \" + responseBody] = true;",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{URL}}/posts",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create post",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Body matches string\", function () {",
+							"    const responseJson = pm.response.json();",
+							"    tests[\"[INFO] Response: \" + responseBody] = true;",
+							"    pm.expect(responseJson).to.haveOwnProperty(\"title\");",
+							"    pm.expect(responseJson).to.haveOwnProperty(\"content\");",
+							"    pm.expect(responseJson).to.haveOwnProperty(\"id\");",
+							"    pm.collectionVariables.set(\"Post_id\", responseJson.id);",
+							"   ",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"{{$randomWord}}\",\n    \"content\": \"{{$randomPhrase}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/posts",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "one post",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Body matches string\", function () {",
+							"    const responseJson = pm.response.json();",
+							"    tests[\"[INFO] Response: \" + responseBody] = true;",
+							"    pm.expect(responseJson.Post).to.haveOwnProperty(\"user_id\");",
+							"    pm.expect(responseJson.Post).to.haveOwnProperty(\"id\");",
+							"    pm.expect(responseJson.Post).to.haveOwnProperty(\"title\");",
+							"    pm.expect(responseJson.Post).to.haveOwnProperty(\"content\");",
+							"    ",
+							"   ",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{URL}}/posts/{{Post_id}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"posts",
+						"{{Post_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update todo",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Body matches string\", function () {",
+							"    const responseJson = pm.response.json();",
+							"    tests[\"[INFO] Response: \" + responseBody] = true;",
+							"    ",
+							"    pm.expect(responseJson).to.haveOwnProperty(\"id\");",
+							"    pm.expect(responseJson).to.haveOwnProperty(\"title\");",
+							"    pm.expect(responseJson.title).to.equal(\"Post SUPER Changed\");",
+							"    pm.expect(responseJson.content).to.equal(\"SUPER CONTENT is  Changed\");",
+							"",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \n    \"title\": \"Post SUPER Changed\",\n    \"content\": \"SUPER CONTENT is  Changed\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/posts/{{Post_id}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"posts",
+						"{{Post_id}}"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "vote own post",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 405\", function () {",
+							"    pm.response.to.have.status(405);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Body matches string\", function () {",
+							"    const responseJson = pm.response.json();",
+							"    tests[\"[INFO] Response: \" + responseBody] = true;",
+							"   ",
+							"    pm.expect(responseJson.detail).to.equal(\"User can not vote his own posts\");",
+							"",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"post_id\": {{Post_id}},\n  \"dir\": 1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/vote",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"vote"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "vote +",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Body matches string\", function () {",
+							"    const responseJson = pm.response.json();",
+							"    tests[\"[INFO] Response: \" + responseBody] = true;",
+							"   ",
+							"    pm.expect(responseJson.message).to.equal(\"successfully added vote\");",
+							"",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"post_id\": 2,\n  \"dir\": 1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/vote",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"vote"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "vote -",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Body matches string\", function () {",
+							"    const responseJson = pm.response.json();",
+							"    tests[\"[INFO] Response: \" + responseBody] = true;",
+							"   ",
+							"    pm.expect(responseJson.message).to.equal(\"successfully deleted vote\");",
+							"",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"post_id\": 2,\n  \"dir\": 0\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/vote",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"vote"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete post",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 204\", function () {",
+							"    pm.response.to.have.status(204);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{URL}}/posts/{{Post_id}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"posts",
+						"{{Post_id}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "URL",
+			"value": "http://localhost:8000",
+			"type": "string"
+		},
+		{
+			"key": "Token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "Username",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "Post_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "User_id",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
